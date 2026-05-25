@@ -32,36 +32,16 @@ public class W_HTTPCmdClient extends HTTP_Worker {
     private HttpClient client;
     private String url;
 
-//    U1L1_OPEN_GATE_EN_S53     = "http://127.0.0.1/CommandSender/Command.svc/OpenBarrier/53";
-//    U1L1_OPEN_GATE_US_S48     = "http://127.0.0.1/CommandSender/Command.svc/OpenBarrier/48";
-//    U1L1_INTERCOMCALL_EN_V53  = "http://127.0.0.1/CommandSender/Command.svc/MakeCall/53";
-//    U1L1_INTERCOMCALL_US_V48  = "http://127.0.0.1/CommandSender/Command.svc/MakeCall/48";
-//    U1L1_OPEN_GATE_C12        = "http://127.0.0.1/CommandSender/Command.svc/OpenCame/12";
-//    U1L1_CLOSE_GATE_C12       = "http://127.0.0.1/CommandSender/Command.svc/ChiudiCame/12";
-//    U1L1_OPEN_GATE_C14        = "http://127.0.0.1/CommandSender/Command.svc/OpenCame/14";
-//    U1L1_CLOSE_GATE_C14       = "http://127.0.0.1/CommandSender/Command.svc/ChiudiCame/14";
-
-    //CHIAMATE REALI
-//    private static final String OPEN_BARRIER              = "http://192.168.99.200/CommandSender/Command.svc/OpenBarrier/";
-//    private static final String CALL                      = "http://192.168.99.200/CommandSender/Command.svc/MakeCall/";
-//    private static final String OPEN_CAME                 = "http://192.168.99.200/CommandSender/Command.svc/OpenCame/";
-//    private static final String CLOSE_CAME                = "http://192.168.99.200/CommandSender/Command.svc/ChiudiCame/";
-
-    // PROVA CRUD CONTROLLOACCESSI
-//    private static final String OPEN_BARRIER              = "http://127.0.0.1:9001/getPanAnaguserByID/";
-//    private static final String CALL                      = "http://127.0.0.1:9001/getPanAnagsiteByID/";
-//    private static final String OPEN_CAME                 = "http://127.0.0.1:9001/getPanAnagprofileByID/";
-//    private static final String CLOSE_CAME                = "http://127.0.0.1:9001/getPanBoundariesByID/";
+    public static final int EN_S_VALUE = 150;
+    public static final int US_S_VALUE = 150;
+    public static final int US_V_VALUE = 150;
+    public static final int CAM_VALUE = 150;
 
     private static final String OPEN_BARRIER              = "http://127.0.0.1:9001/CommandSender/Command.svc/";
     private static final String CALL                      = "http://127.0.0.1:9001/CommandSender/Command.svc/";
     private static final String OPEN_CAME                 = "http://127.0.0.1:9001/CommandSender/Command.svc/";
     private static final String CLOSE_CAME                = "http://127.0.0.1:9001/CommandSender/Command.svc/";
 
-//    public static final String OPEN_BARRIER_VALUE           = "110";
-//    public static final String CALL_VALUE                   = "111";
-//    public static final String OPEN_CAME_VALUE              = "112";
-//    public static final String CLOSE_CAME_VALUE             = "113";
     public static final String EMPTYSTRING_VALUE            = "";
 
     public static final String COMMAND_110 = "110";
