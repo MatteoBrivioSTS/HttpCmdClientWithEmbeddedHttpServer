@@ -37,10 +37,6 @@ public class W_HTTPCmdClient extends HTTP_Worker {
     public static final int US_V_VALUE = 150;
     public static final int CAM_VALUE = 150;
 
-    private static final String OPEN_BARRIER              = "http://127.0.0.1:9001/CommandSender/Command.svc/";
-    private static final String CALL                      = "http://127.0.0.1:9001/CommandSender/Command.svc/";
-    private static final String OPEN_CAME                 = "http://127.0.0.1:9001/CommandSender/Command.svc/";
-    private static final String CLOSE_CAME                = "http://127.0.0.1:9001/CommandSender/Command.svc/";
 
     public static final String EMPTYSTRING_VALUE            = "";
 
@@ -48,6 +44,9 @@ public class W_HTTPCmdClient extends HTTP_Worker {
     public static final String COMMAND_111 = "111";
     public static final String COMMAND_112 = "112";
     public static final String COMMAND_113 = "113";
+    public static final String COMMAND_114 = "114";
+    public static final String COMMAND_115 = "115";
+    public static final String COMMAND_116 = "116";
 
     public static final String PALAZZO_U1 = "U1";
     public static final String LIVELLO_L0 = "L0";
@@ -96,10 +95,10 @@ public class W_HTTPCmdClient extends HTTP_Worker {
         }
     }
 
-    public void command110request(String url, int name) throws IOException, InterruptedException {
+    public void command110request(String url) throws IOException, InterruptedException {
                 HttpRequest request = HttpRequest.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(url+name))
+                .uri(URI.create(url))
                 .header("Content-type", "application/json")
                 .timeout(Duration.ofSeconds(5))
                 .GET()
@@ -108,89 +107,51 @@ public class W_HTTPCmdClient extends HTTP_Worker {
         System.out.println("request "+ request);
         System.out.println("Response: " + response.body());
     }
-    public void command111request(String url, int name) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(url+name))
-                .header("Content-type", "application/json")
-                .timeout(Duration.ofSeconds(5))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Response: " + response.body());
-    }
-    public void command112request(String url, int name) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(url+name))
-                .header("Content-type", "application/json")
-                .timeout(Duration.ofSeconds(5))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Response: " + response.body());
-    }
-    public void command113request(String url, int name) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(url+name))
-                .header("Content-type", "application/json")
-                .timeout(Duration.ofSeconds(5))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Response: " + response.body());
-    }
 
-//3 chiamate apri varco, chiamata, 110 in poi
 //    public void openBarrierHTTPRequest(int barrier) throws IOException, InterruptedException {
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .version(HttpClient.Version.HTTP_1_1)
-//                .uri(URI.create(OPEN_BARRIER +OPEN_BARRIER_VALUE+"/"+ barrier))
-//                .header("Content-type", "application/json")
-//                .timeout(Duration.ofSeconds(5))
-//                .GET()
-//                .build();
-//        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//        System.out.println("Response: " + response.body());
-//    }
-//
-//    public void intercomCallHTTPRequest(int intercom) throws IOException, InterruptedException {
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .version(HttpClient.Version.HTTP_1_1)
-//                .uri(URI.create(CALL+CALL_VALUE+"/"+intercom))
-//                .header("Content-type", "application/json")
-//                .timeout(Duration.ofSeconds(5))
-//                .GET()
-//                .build();
-//        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//        System.out.println("Response: " + response.body());
-//    }
-//
-//    public void openCameHTTPRequest(int came) throws IOException, InterruptedException {
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .version(HttpClient.Version.HTTP_1_1)
-//                .uri(URI.create(OPEN_CAME+OPEN_CAME_VALUE+"/"+came))
-//                .header("Content-type", "application/json")
-//                .timeout(Duration.ofSeconds(5))
-//                .GET()
-//                .build();
-//        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//        System.out.println("Response: " + response.body());
-//    }
-//
-//    public void closeCameHTTPRequest(int came) throws IOException, InterruptedException {
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .version(HttpClient.Version.HTTP_1_1)
-//                .uri(URI.create(CLOSE_CAME+CLOSE_CAME_VALUE+"/"+came))
-//                .header("Content-type", "application/json")
-//                .timeout(Duration.ofSeconds(5))
-//                .GET()
-//                .build();
-//        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//        System.out.println("Response: " + response.body());
-//    }
-
+////        HttpRequest request = HttpRequest.newBuilder()
+////                .version(HttpClient.Version.HTTP_1_1)
+////                .uri(URI.create(OPEN_BARRIER +OPEN_BARRIER_VALUE+"/"+ barrier))
+////                .header("Content-type", "application/json")
+////                .timeout(Duration.ofSeconds(5))
+////                .GET()
+////                .build();
+////        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+////        System.out.println("Response: " + response.body());
+////    }
+    public void command111request(String url) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(url))
+                .header("Content-type", "application/json")
+                .timeout(Duration.ofSeconds(5))
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Response: " + response.body());
+    }
+    public void command112request(String url) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(url))
+                .header("Content-type", "application/json")
+                .timeout(Duration.ofSeconds(5))
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Response: " + response.body());
+    }
+    public void command113request(String url) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(url))
+                .header("Content-type", "application/json")
+                .timeout(Duration.ofSeconds(5))
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Response: " + response.body());
+    }
 
     //Getter and Setter
     public RCXChannel getRcxChannel() {

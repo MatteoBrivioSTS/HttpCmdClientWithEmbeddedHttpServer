@@ -44,6 +44,9 @@ public class W_HTTPCmdClient_NORMAL implements ConcreteStatus {
                     case W_HTTPCmdClient.COMMAND_111 -> {httpgetrequest111(cmd.getSecondValue());}
                     case W_HTTPCmdClient.COMMAND_112 -> {httpgetrequest112(cmd.getSecondValue());}
                     case W_HTTPCmdClient.COMMAND_113 -> {httpgetrequest113(cmd.getSecondValue());}
+                    case W_HTTPCmdClient.COMMAND_114 -> {httpgetrequest114(cmd.getSecondValue());}
+                    case W_HTTPCmdClient.COMMAND_115 -> {httpgetrequest115(cmd.getSecondValue());}
+                    case W_HTTPCmdClient.COMMAND_116 -> {httpgetrequest116(cmd.getSecondValue());}
                     case W_HTTPCmdClient.EMPTYSTRING_VALUE -> {break;}
                 }
             }
@@ -61,10 +64,9 @@ public class W_HTTPCmdClient_NORMAL implements ConcreteStatus {
             HttpStringCommand hsc = getWorker().getHttpStingCommands().get(
                     rcxChannel.getProto() + Record.KEYSYNCH + getWorker().getName() + Record.KEYSYNCH +
                             cmd.getName()+ Record.KEYSYNCH+ W_HTTPCmdClient.COMMAND_110);
-            int name = Integer.parseInt(cmd.getName().substring(4));
             System.out.println("pntdef "+pntdef+" hsc "+hsc);
             if (hsc != null){
-                getWorker().command110request(hsc.getHttpString().trim(), name);
+                getWorker().command110request(hsc.getHttpString().trim());
             }
         }
     }
@@ -77,10 +79,9 @@ public class W_HTTPCmdClient_NORMAL implements ConcreteStatus {
             HttpStringCommand hsc = getWorker().getHttpStingCommands().get(
                     rcxChannel.getProto() + Record.KEYSYNCH + getWorker().getName() + Record.KEYSYNCH +
                             cmd.getName()+ Record.KEYSYNCH+ W_HTTPCmdClient.COMMAND_111);
-            int name = Integer.parseInt(cmd.getName().substring(4));
             System.out.println("pntdef "+pntdef+" hsc "+hsc);
             if (hsc != null){
-                getWorker().command111request(hsc.getHttpString().trim(), name);
+                getWorker().command111request(hsc.getHttpString().trim());
             }
         }
     }
@@ -93,10 +94,9 @@ public class W_HTTPCmdClient_NORMAL implements ConcreteStatus {
             HttpStringCommand hsc = getWorker().getHttpStingCommands().get(
                     rcxChannel.getProto() + Record.KEYSYNCH + getWorker().getName() + Record.KEYSYNCH +
                             cmd.getName()+ Record.KEYSYNCH+ W_HTTPCmdClient.COMMAND_112);
-            int name = Integer.parseInt(cmd.getName().substring(4));
             System.out.println("pntdef "+pntdef+" hsc "+hsc);
             if (hsc != null){
-                getWorker().command112request(hsc.getHttpString().trim(), name);
+                getWorker().command112request(hsc.getHttpString().trim());
             }
         }
     }
@@ -109,10 +109,54 @@ public class W_HTTPCmdClient_NORMAL implements ConcreteStatus {
             HttpStringCommand hsc = getWorker().getHttpStingCommands().get(
                     rcxChannel.getProto() + Record.KEYSYNCH + getWorker().getName() + Record.KEYSYNCH +
                             cmd.getName()+ Record.KEYSYNCH+ W_HTTPCmdClient.COMMAND_113);
-            int name = Integer.parseInt(cmd.getName().substring(4));
             System.out.println("pntdef "+pntdef+" hsc "+hsc);
             if (hsc != null){
-                getWorker().command113request(hsc.getHttpString().trim(), name);
+                getWorker().command113request(hsc.getHttpString().trim());
+            }
+        }
+    }
+    private void httpgetrequest114(Command cmd) throws IOException, InterruptedException {
+        RCXChannel rcxChannel = (RCXChannel) getWorker().getCoreChannel();
+        Pntdef pntdef = getWorker().getPntdefs().get(rcxChannel.getProto() +
+                Record.KEYSYNCH + getWorker().getName() + Record.KEYSYNCH + cmd.getName());
+        if(pntdef != null)
+        {
+            HttpStringCommand hsc = getWorker().getHttpStingCommands().get(
+                    rcxChannel.getProto() + Record.KEYSYNCH + getWorker().getName() + Record.KEYSYNCH +
+                            cmd.getName()+ Record.KEYSYNCH+ W_HTTPCmdClient.COMMAND_114);
+            System.out.println("pntdef "+pntdef+" hsc "+hsc);
+            if (hsc != null){
+                getWorker().command113request(hsc.getHttpString().trim());
+            }
+        }
+    }
+    private void httpgetrequest115(Command cmd) throws IOException, InterruptedException {
+        RCXChannel rcxChannel = (RCXChannel) getWorker().getCoreChannel();
+        Pntdef pntdef = getWorker().getPntdefs().get(rcxChannel.getProto() +
+                Record.KEYSYNCH + getWorker().getName() + Record.KEYSYNCH + cmd.getName());
+        if(pntdef != null)
+        {
+            HttpStringCommand hsc = getWorker().getHttpStingCommands().get(
+                    rcxChannel.getProto() + Record.KEYSYNCH + getWorker().getName() + Record.KEYSYNCH +
+                            cmd.getName()+ Record.KEYSYNCH+ W_HTTPCmdClient.COMMAND_115);
+            System.out.println("pntdef "+pntdef+" hsc "+hsc);
+            if (hsc != null){
+                getWorker().command113request(hsc.getHttpString().trim());
+            }
+        }
+    }
+    private void httpgetrequest116(Command cmd) throws IOException, InterruptedException {
+        RCXChannel rcxChannel = (RCXChannel) getWorker().getCoreChannel();
+        Pntdef pntdef = getWorker().getPntdefs().get(rcxChannel.getProto() +
+                Record.KEYSYNCH + getWorker().getName() + Record.KEYSYNCH + cmd.getName());
+        if(pntdef != null)
+        {
+            HttpStringCommand hsc = getWorker().getHttpStingCommands().get(
+                    rcxChannel.getProto() + Record.KEYSYNCH + getWorker().getName() + Record.KEYSYNCH +
+                            cmd.getName()+ Record.KEYSYNCH+ W_HTTPCmdClient.COMMAND_116);
+            System.out.println("pntdef "+pntdef+" hsc "+hsc);
+            if (hsc != null){
+                getWorker().command113request(hsc.getHttpString().trim());
             }
         }
     }

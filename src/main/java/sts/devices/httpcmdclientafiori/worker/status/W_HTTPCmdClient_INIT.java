@@ -98,19 +98,19 @@ public class W_HTTPCmdClient_INIT implements ConcreteStatus {
         for(int i=1;i<=W_HTTPCmdClient.US_S_VALUE;i++)
         {
             Record record = Us_S_Model.formObjToRecord(new Us_S_Model(rcxChannel.getProto(),
-                    getWorker().getName(),String.format("Us_S%04d", i),String.format("En_S%04d", i),0,0,0,0));
+                    getWorker().getName(),String.format("Us_S%04d", i),String.format("Us_S%04d", i),0,0,0,0));
             rcxChannel.sendRecord(record);
         }
         for(int i=1;i<=W_HTTPCmdClient.US_V_VALUE;i++)
         {
             Record record = En_V_Model.formObjToRecord(new En_V_Model(rcxChannel.getProto(),
-                    getWorker().getName(),String.format("Us_V%04d", i),String.format("En_S%04d", i),0,0,0,0));
+                    getWorker().getName(),String.format("Us_V%04d", i),String.format("Us_V%04d", i),0,0,0,0));
             rcxChannel.sendRecord(record);
         }
         for(int i=1;i<=W_HTTPCmdClient.CAM_VALUE;i++)
         {
             Record record = CAM_Model.formObjToRecord(new CAM_Model(rcxChannel.getProto(),
-                    getWorker().getName(),String.format("CAM_%04d", i),String.format("En_S%04d", i),0,0,0,0));
+                    getWorker().getName(),String.format("C%04d", i),String.format("C%04d", i),0,0,0,0));
             rcxChannel.sendRecord(record);
         }
         initPrio++;
