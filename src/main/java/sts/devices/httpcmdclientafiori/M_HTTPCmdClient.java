@@ -4,7 +4,6 @@ import lis.drivers.comm.conn.core.RCXChannel;
 import lis.drivers.model.rcx.RCXDevice;
 import lis.drivers.model.rcx.RCXModelChannel;
 import lis.drivers.model.rcx.Subscription;
-import sts.devices.httpcmdclientafiori.embeddedhttpserver.TestServer.server.HTTP_Server;
 import sts.devices.httpcmdclientafiori.tblhander.TH_HTTPCmdClient;
 import sts.devices.httpcmdclientafiori.worker.W_HTTPCmdClient;
 
@@ -18,7 +17,6 @@ public class M_HTTPCmdClient {
     public RCXModelChannel rcxModelChannel = null;
     public String fileName = "HTTPCmdClient_AFiori/HTTPCmdClient_AFiori.json";
     public TH_HTTPCmdClient th_httpCmdClient = null;
-    public HTTP_Server httpServer = null;
 
     static void main(String[] args){
         M_HTTPCmdClient m_httpCmdClient = new M_HTTPCmdClient();
@@ -48,7 +46,6 @@ public class M_HTTPCmdClient {
             m_httpCmdClient.rcx.setHandler(m_httpCmdClient.th_httpCmdClient);
             m_httpCmdClient.rcx.setSubs(m_httpCmdClient.rcxModelChannel.getSubscription());
             m_httpCmdClient.rcx.setDevs(true);
-            m_httpCmdClient.httpServer = new HTTP_Server(9001);
 
             for(Enumeration en = m_httpCmdClient.rcx.getWorkers().elements(); en.hasMoreElements();)
             {
