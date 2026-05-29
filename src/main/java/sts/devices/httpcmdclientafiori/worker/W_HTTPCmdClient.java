@@ -1,24 +1,29 @@
 package sts.devices.httpcmdclientafiori.worker;
 
+import lis.drivers.com.metarec.util.Record;
 import lis.drivers.comm.conn.core.CoreChannel;
 import lis.drivers.comm.conn.core.RCXChannel;
+import lis.drivers.comm.conn.ext.ExtHTTPChannel;
 import lis.drivers.model.rcx.RCXDevice;
 import lis.drivers.worker.HTTP_Worker;
 import lis.drivers.worker.helper.KeepAlive;
 import lis.drivers.worker.helper.Tuple;
 import lis.drivers.worker.helper.WorkerStatus;
 import sts.devices.httpcmdclientafiori.models.Command;
+import sts.devices.httpcmdclientafiori.models.Fullev;
 import sts.devices.httpcmdclientafiori.models.HttpStringCommand;
 import sts.devices.httpcmdclientafiori.models.Pntdef;
+import sts.devices.httpcmdclientafiori.worker.status.W_HTTPCmdClient_DISCON;
 import sts.devices.httpcmdclientafiori.worker.status.W_HTTPCmdClient_INIT;
-import sts.devices.httpcmdclientafiori.worker.status.W_HTTPCmdClient_NORMAL;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpTimeoutException;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -33,12 +38,13 @@ public class W_HTTPCmdClient extends HTTP_Worker {
     private String url;
 
     public static final int EN_S_VALUE = 150;
+    public static final int EN_V_VALUE = 150;
     public static final int US_S_VALUE = 150;
     public static final int US_V_VALUE = 150;
-    public static final int CAM_VALUE = 150;
+    public static final int C_VALUE = 150;
+    public static final int S20_ = 150;
 
-
-    public static final String EMPTYSTRING_VALUE            = "";
+    public static final String EMPTYSTRING_VALUE = "";
 
     public static final String COMMAND_110 = "110";
     public static final String COMMAND_111 = "111";
@@ -47,20 +53,21 @@ public class W_HTTPCmdClient extends HTTP_Worker {
     public static final String COMMAND_114 = "114";
     public static final String COMMAND_115 = "115";
     public static final String COMMAND_116 = "116";
+    public static final String COMMAND_RESET = "6";
 
-    public static final String PALAZZO_U1 = "U1";
-    public static final String LIVELLO_L0 = "L0";
+    public static final String EN_S4ZERO =  "En_S%04d";
+    public static final String US_S4ZERO =  "Us_S%04d";
+    public static final String EN_V4ZERO =  "En_V%04d";
+    public static final String US_V4ZERO =  "Us_V%04d";
+    public static final String C4ZERO =     "C%04d";
+    public static final String S20_4ZERO =    "S20_%04d";
 
-    public static final String EN_S =  "En_S";
-    public static final String US_S =  "Us_S";
-    public static final String EN_V =  "En_V";
-    public static final String US_V =  "Us_V";
-    public static final String C =     "C";
-
+    private static final String LOGS_PATH = "C:/Bin/PSM/LOGS/HTTPCMDCLIENT/";
 
     private Hashtable<String,Pntdef> pntdefs = new Hashtable<>();
     private ArrayList<Tuple<Integer,Command>> cmds = new ArrayList<>();
     private Hashtable<String, HttpStringCommand> httpStingCommands = new Hashtable<>();
+    private Hashtable<String, Fullev> fullevs = new Hashtable<>();
 
     private int alignTable = 0;
     //Constructor
@@ -89,71 +96,180 @@ public class W_HTTPCmdClient extends HTTP_Worker {
             try {
                 getWs().getStatus().business(getWs());
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            }catch (Exception e) {
+                System.err.println("Errore generico nel worker: " + e.getMessage());
+                goToDisconn(e);
+                writeLog(LOGS_PATH, e);
             }
+
         }
     }
 
-    public void command110request(String url) throws IOException, InterruptedException {
+    public void command110request(String url) throws Exception {
                 HttpRequest request = HttpRequest.newBuilder()
+                        .version(HttpClient.Version.HTTP_1_1)
+                        .uri(URI.create(url))
+                        .header("Content-type", "application/json")
+                        .timeout(Duration.ofSeconds(10))
+                        .GET()
+                        .build();
+                System.out.println("request " + request);
+                HttpResponse<String> response =
+                        client.send(request, HttpResponse.BodyHandlers.ofString());
+                System.out.println("Response: " + response.body()+ "status code" + response.statusCode());
+    }
+    public void command111request(String url) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
                 .uri(URI.create(url))
                 .header("Content-type", "application/json")
-                .timeout(Duration.ofSeconds(5))
+                .timeout(Duration.ofSeconds(10))
                 .GET()
                 .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("request "+ request);
-        System.out.println("Response: " + response.body());
+        System.out.println("request " + request);
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Response: " + response.body()+ "status code" + response.statusCode());
+    }
+    public void command112request(String url) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(url))
+                .header("Content-type", "application/json")
+                .timeout(Duration.ofSeconds(10))
+                .GET()
+                .build();
+        System.out.println("request " + request);
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Response: " + response.body()+ "status code" + response.statusCode());
+    }
+    public void command113request(String url) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(url))
+                .header("Content-type", "application/json")
+                .timeout(Duration.ofSeconds(10))
+                .GET()
+                .build();
+        System.out.println("request " + request);
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Response: " + response.body()+ "status code" + response.statusCode());
+    }
+    public void command114request(String url) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(url))
+                .header("Content-type", "application/json")
+                .timeout(Duration.ofSeconds(10))
+                .GET()
+                .build();
+        System.out.println("request " + request);
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Response: " + response.body()+ "status code" + response.statusCode());
+    }
+    public void command115request(String url) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(url))
+                .header("Content-type", "application/json")
+                .timeout(Duration.ofSeconds(10))
+                .GET()
+                .build();
+        System.out.println("request " + request);
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Response: " + response.body()+ "status code" + response.statusCode());
+    }
+    public void command116request(String url) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(url))
+                .header("Content-type", "application/json")
+                .timeout(Duration.ofSeconds(10))
+                .GET()
+                .build();
+        System.out.println("request " + request);
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Response: " + response.body()+ "status code" + response.statusCode());
     }
 
-//    public void openBarrierHTTPRequest(int barrier) throws IOException, InterruptedException {
-////        HttpRequest request = HttpRequest.newBuilder()
-////                .version(HttpClient.Version.HTTP_1_1)
-////                .uri(URI.create(OPEN_BARRIER +OPEN_BARRIER_VALUE+"/"+ barrier))
-////                .header("Content-type", "application/json")
-////                .timeout(Duration.ofSeconds(5))
-////                .GET()
-////                .build();
-////        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-////        System.out.println("Response: " + response.body());
-////    }
-    public void command111request(String url) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(url))
-                .header("Content-type", "application/json")
-                .timeout(Duration.ofSeconds(5))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Response: " + response.body());
-    }
-    public void command112request(String url) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(url))
-                .header("Content-type", "application/json")
-                .timeout(Duration.ofSeconds(5))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Response: " + response.body());
-    }
-    public void command113request(String url) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(url))
-                .header("Content-type", "application/json")
-                .timeout(Duration.ofSeconds(5))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Response: " + response.body());
-    }
 
+
+    @Override
+    public boolean writeLog(String path, Exception ex) {
+
+        System.out.println(ex.getMessage());
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        String sStackTrace = sw.toString();
+
+        LocalDateTime now =  LocalDateTime.now();
+        File obj = new File(path + this.getName() + "_" + String.format("%04d%02d%02d%02d%02d%02d"
+                ,now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond())  + ".txt");
+        try
+        {
+            if(obj.createNewFile())
+            {
+                FileWriter writer = new FileWriter(obj);
+                writer.write(sStackTrace);
+                writer.close();
+                System.out.println("File created: " + obj.getName());
+                return true;
+            }
+            else
+            {
+                System.out.println("File already exists.");
+                return false;
+            }
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //sendLogs
+    public void sendLogs(int lvl, String line) throws Exception {
+        rcxChannel = (RCXChannel) getCoreChannel();
+        Record rec = new Record(4, "META#LOGT2");
+        rec.fieldValues[0] = Integer.toString(lvl);
+        rec.fieldValues[1] = rcxChannel.getProto();
+        rec.fieldValues[2] = getName();
+        rec.fieldValues[3] = line;
+        rcxChannel.sendRecord(rec);
+    }
+    //
+    public void goToDisconn(Exception e)
+    {
+        e.printStackTrace();
+        this.writeLog(LOGS_PATH, e);
+        this.getWs().setStatus(new W_HTTPCmdClient_DISCON());
+        rcxChannel = (RCXChannel) this.getCoreChannel();
+        rcxDevice = rcxChannel.getDevices().get(this.getName());
+        rcxDevice.devicstatus &= ~RCXDevice.STAT_UPLD;
+        rcxDevice.devicstatus |= RCXDevice.STAT_DISC;
+        Record rec = rcxDevice.DescribeDevice();
+        try {
+            rcxChannel.sendRecord(rec);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            this.writeLog(LOGS_PATH, ex);
+        }
+    }
     //Getter and Setter
+
+    public Hashtable<String, Fullev> getFullevs() {
+        return fullevs;
+    }
+
+    public void setFullevs(Hashtable<String, Fullev> fullevs) {
+        this.fullevs = fullevs;
+    }
+
     public RCXChannel getRcxChannel() {
         return rcxChannel;
     }
